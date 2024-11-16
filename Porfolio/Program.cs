@@ -5,6 +5,7 @@ using Porfolio.Interfaces;
 using Porfolio.Repositories;
 using Porfolio.Services;
 using Porfolio.UnitOfWork;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 
