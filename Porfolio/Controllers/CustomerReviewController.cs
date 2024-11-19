@@ -25,9 +25,9 @@ namespace Porfolio.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerReview>> CreateReview(CustomerReview review)
+        public async Task<ActionResult<CustomerReview>> CreateReview(CustomerReview review, IFormFile file)
         {
-            await _customerReviewService.AddReviewAsync(review);
+            await _customerReviewService.AddReviewAsync(review, file);
             return CreatedAtAction(nameof(GetReviews), new { id = review.Id }, review);
         }
 
@@ -36,7 +36,7 @@ namespace Porfolio.Controllers
         {
             if (id != review.Id) return BadRequest();
             await _customerReviewService.UpdateReviewAsync(review);
-            return NoContent();
+            return Ok(review);
         }
 
         [HttpDelete("{id}")]

@@ -17,8 +17,7 @@ namespace Porfolio.Model
         [MaxLength(300)]
         public string ReviewDescription { get; set; }
         public DateTime ReviewTime { get; set; }
-
-        public string? Photo { get; set; }
+        public FileDetails? file { get; set; }
         public string? Name { get; set; }
         public string? Quotation { get; set; }
         public string? Designation { get; set; }

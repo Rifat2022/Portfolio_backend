@@ -13,10 +13,13 @@ namespace Porfolio.Services
         //private readonly IUnitOfWork _unitOfWork;
         private readonly ICustomerReviewRepository _customerReviewRepository;
         private readonly ILogger<CustomerReview> _logger;
+        private readonly IFileRepository _fileRepository; 
 
-        public CustomerReviewService(ICustomerReviewRepository customerReviewRepository, ILogger<CustomerReview> logger)
+        public CustomerReviewService(ICustomerReviewRepository customerReviewRepository, 
+            IFileRepository fileRepository, ILogger<CustomerReview> logger)
         {
             _customerReviewRepository = customerReviewRepository;
+            _fileRepository = fileRepository; 
             _logger = logger;
         }
 
@@ -70,12 +73,12 @@ namespace Porfolio.Services
         }
 
 
-        public async Task AddReviewAsync(CustomerReview review)
+        public async Task AddReviewAsync(CustomerReview review, IFormFile file)
         {
             try
             {
                 _logger.LogInformation("Attempting to add a new review.");
-
+                await _fileRepository.UpdateFile(file, "CustomerReview", file.FileName); 
                 await _customerReviewRepository.AddReviewAsync(review);
 
                 _logger.LogInformation("Successfully added a new review.");
