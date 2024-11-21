@@ -23,10 +23,11 @@ namespace Porfolio.Repositories
             return await _context.CustomerReviews.FindAsync(id);
         }
 
-        public async Task AddReviewAsync(CustomerReview review)
+        public async Task<CustomerReview> AddReviewAsync(CustomerReview review)
         {
             _context.CustomerReviews.Add(review);
             await _context.SaveChangesAsync();
+            return review;
         }
 
         public async Task UpdateReviewAsync(CustomerReview review)

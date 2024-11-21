@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Porfolio.BusinessLogic;
 using Porfolio.Data;
 using Porfolio.Interfaces;
 using Porfolio.Model;
 using Porfolio.UnitOfWork;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 namespace Porfolio.Services
 {
-    public class CustomerReviewService 
+    public class CustomerReviewService : ICustomerReviewService
     {
         //private readonly IUnitOfWork _unitOfWork;
         private readonly ICustomerReviewRepository _customerReviewRepository;
         private readonly ILogger<CustomerReview> _logger;
-        private readonly IFileRepository _fileRepository; 
+        private readonly IFileService _fileService;
 
-        public CustomerReviewService(ICustomerReviewRepository customerReviewRepository, 
-            IFileRepository fileRepository, ILogger<CustomerReview> logger)
+        public CustomerReviewService(ICustomerReviewRepository customerReviewRepository,
+            IFileService fileService, ILogger<CustomerReview> logger)
         {
             _customerReviewRepository = customerReviewRepository;
-            _fileRepository = fileRepository; 
+            _fileService = fileService; 
             _logger = logger;
         }
 
@@ -73,22 +73,25 @@ namespace Porfolio.Services
         }
 
 
-        public async Task AddReviewAsync(CustomerReview review, IFormFile file)
+        public async Task<CustomerReview> CreateReviewAsync(CustomerReview review, IFormFile file)
         {
+            
+            if (file == null) throw new ArgumentNullException(nameof(file));
             try
             {
+                _logger.LogInformation("Attempting to add a new file in the rootfolder");
+                FileDetails fileDetails = await _fileService.UploadFileAsync(file, "customerReview");
+                review.FileDetails = JsonSerializer.Serialize(fileDetails);
                 _logger.LogInformation("Attempting to add a new review.");
-                await _fileRepository.UpdateFile(file, "CustomerReview", file.FileName); 
-                await _customerReviewRepository.AddReviewAsync(review);
-
-                _logger.LogInformation("Successfully added a new review.");
+                return await _customerReviewRepository.AddReviewAsync(review);                 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while adding a new review.");
-                throw;
+                throw; // Rethrow to preserve stack trace.
             }
         }
+
 
 
         public async Task UpdateReviewAsync(CustomerReview review)

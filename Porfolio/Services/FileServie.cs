@@ -1,13 +1,14 @@
-﻿using Porfolio.Model;
+﻿using Porfolio.Interfaces;
+using Porfolio.Model;
 using Porfolio.Repositories;
 
 namespace Porfolio.Services
 {
-    public class FileService
+    public class FileService : IFileService
     {
-        private readonly FileRepository _repository;
+        private readonly IFileRepository _repository;
 
-        public FileService(FileRepository repository)
+        public FileService(IFileRepository repository)
         {
             _repository = repository;
         }

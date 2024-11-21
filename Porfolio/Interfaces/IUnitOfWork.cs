@@ -1,8 +1,6 @@
-﻿using Porfolio.Interfaces;
-
-namespace Porfolio.UnitOfWork
+﻿namespace Porfolio.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork
     {
         ICustomerReviewRepository CustomerReviewRepository { get; }
         IOrderRepository OrderRepository { get; }  // Example of another repository

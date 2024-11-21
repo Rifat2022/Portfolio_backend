@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Porfolio.Model
 {
@@ -16,8 +17,10 @@ namespace Porfolio.Model
         [Required]
         [MaxLength(300)]
         public string ReviewDescription { get; set; }
-        public DateTime ReviewTime { get; set; }
-        public FileDetails? file { get; set; }
+        public string? ReviewTime { get; set; }
+
+        [Required]
+        public string FileDetails { get; set; }
         public string? Name { get; set; }
         public string? Quotation { get; set; }
         public string? Designation { get; set; }

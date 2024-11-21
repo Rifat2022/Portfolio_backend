@@ -9,4 +9,5 @@ namespace Porfolio.Data
         public DbSet<CustomerReview> CustomerReviews { get; set; }
 
     }
+
 }

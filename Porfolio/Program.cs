@@ -1,55 +1,81 @@
 using Microsoft.EntityFrameworkCore;
-using Porfolio.BusinessLogic;
 using Porfolio.Data;
 using Porfolio.Interfaces;
 using Porfolio.Repositories;
 using Porfolio.Services;
 using Porfolio.UnitOfWork;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Database context
 builder.Services.AddDbContext<PortfolioContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PortfolioDb")));
 
-builder.Services.AddScoped<CustomerReviewBusinessLogic>();
+// Dependency Injection
 builder.Services.AddScoped<ICustomerReviewRepository, CustomerReviewRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
-
-builder.Services.AddScoped<CustomerReviewService>();
-builder.Services.AddScoped<FileService>();
+builder.Services.AddScoped<ICustomerReviewService, CustomerReviewService>();
+builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-//builder.Services.AddScoped<ICustomerReviewRepository, CustomerReviewService>();
-builder.Services.AddControllers();
+// Form options for large file uploads
+builder.Services.Configure<FormOptions>(o =>
+{
+    o.ValueLengthLimit = 50 * 1024 * 1024; // 50 MB
+    o.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
+    o.MemoryBufferThreshold = 1 * 1024 * 1024; // 1 MB
+});
+
+// CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost4200", policy =>
     {
-        policy.WithOrigins("http://localhost:4200") // Allow requests from localhost:4200
-              .AllowAnyHeader()                   // Allow all headers
-              .AllowAnyMethod();                  // Allow all HTTP methods (GET, POST, etc.)
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Add controllers and Swagger
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-// Use CORS middleware
+
+// CORS
 app.UseCors("AllowLocalhost4200");
+
+// Static files
+var resourcesPath = Path.Combine(Directory.GetCurrentDirectory(), "Resources");
+if (!Directory.Exists(resourcesPath))
+{
+    Directory.CreateDirectory(resourcesPath);
+}
+app.UseStaticFiles();
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(resourcesPath),
+    RequestPath = "/Resources"
+});
+
+// HTTPS
 app.UseHttpsRedirection();
 
+// Authorization
 app.UseAuthorization();
 
+// Controllers
 app.MapControllers();
 
 app.Run();

@@ -7,11 +7,9 @@ namespace Porfolio.Repositories
 {
     public class FileRepository : IFileRepository
     {
-        private readonly PortfolioContext _context;
         private readonly string _baseFolder;
-        public FileRepository(PortfolioContext context)
+        public FileRepository()
         {
-            _context = context;
             _baseFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/assets/images");
         }
         // Upload File
