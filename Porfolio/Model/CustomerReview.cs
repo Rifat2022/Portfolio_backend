@@ -19,11 +19,15 @@ namespace Porfolio.Model
         public string ReviewDescription { get; set; }
         public string? ReviewTime { get; set; }
 
+        // Foreign key for FileDetails
         [Required]
-        public string FileDetails { get; set; }
+        public int FileDetailsId { get; set; }
+        public FileDetails FileDetails { get; set; } // Navigation property
+
         public string? Name { get; set; }
         public string? Quotation { get; set; }
         public string? Designation { get; set; }
         public string? Address { get; set; }
     }
+
 }

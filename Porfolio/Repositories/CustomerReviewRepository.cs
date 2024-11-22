@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Porfolio.Data;
-using Porfolio.Interfaces;
 using Porfolio.Model;
+using Porfolio.Repositories.Interface;
 
 namespace Porfolio.Repositories
 {
@@ -13,37 +13,63 @@ namespace Porfolio.Repositories
         {
             _context = context;
         }
-        public async Task<List<CustomerReview>> GetAllReviewsAsync()
-        {
-            return await _context.CustomerReviews.ToListAsync();
-        }
-
-        public async Task<CustomerReview?> GetReviewByIdAsync(int id)
-        {
-            return await _context.CustomerReviews.FindAsync(id);
-        }
-
-        public async Task<CustomerReview> AddReviewAsync(CustomerReview review)
+        public async Task<CustomerReview> CreateCustomerReviewAsync(CustomerReview review)
         {
             _context.CustomerReviews.Add(review);
             await _context.SaveChangesAsync();
             return review;
         }
 
-        public async Task UpdateReviewAsync(CustomerReview review)
+        public async Task<IEnumerable<CustomerReview>> GetAllCustomerReviewsAsync()
         {
-            _context.Entry(review).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            return await _context.CustomerReviews
+                .Include(cr => cr.FileDetails)
+                .ToListAsync();
         }
 
-        public async Task DeleteReviewAsync(int id)
+        public async Task<CustomerReview?> GetCustomerReviewByIdAsync(int id)
+        {
+            return await _context.CustomerReviews
+                .Include(cr => cr.FileDetails)
+                .FirstOrDefaultAsync(cr => cr.Id == id);
+        }
+
+        public async Task<CustomerReview?> UpdateCustomerReviewAsync(int id, CustomerReview review)
+        {
+            var existingReview = await _context.CustomerReviews.FindAsync(id);
+            if (existingReview == null)
+                return null;
+
+            existingReview.Email = review.Email;
+            existingReview.ReviewDescription = review.ReviewDescription;
+            existingReview.ReviewTime = review.ReviewTime;
+            existingReview.Name = review.Name;
+            existingReview.Quotation = review.Quotation;
+            existingReview.Designation = review.Designation;
+            existingReview.Address = review.Address;
+
+            // Update FileDetails if provided
+            if (review.FileDetails != null)
+            {
+                existingReview.FileDetails.FileName = review.FileDetails.FileName;
+                existingReview.FileDetails.ContentType = review.FileDetails.ContentType;
+                existingReview.FileDetails.Path = review.FileDetails.Path;
+                existingReview.FileDetails.Data = review.FileDetails.Data;
+            }
+
+            await _context.SaveChangesAsync();
+            return existingReview;
+        }
+
+        public async Task<bool> DeleteCustomerReviewAsync(int id)
         {
             var review = await _context.CustomerReviews.FindAsync(id);
-            if (review != null)
-            {
-                _context.CustomerReviews.Remove(review);
-                await _context.SaveChangesAsync();
-            }
+            if (review == null)
+                return false;
+
+            _context.CustomerReviews.Remove(review);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

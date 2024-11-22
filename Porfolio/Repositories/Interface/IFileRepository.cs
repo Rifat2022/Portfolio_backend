@@ -1,6 +1,6 @@
 ﻿using Porfolio.Model;
 
-namespace Porfolio.Interfaces
+namespace Porfolio.Repositories.Interface
 {
     public interface IFileRepository
     {
@@ -9,6 +9,6 @@ namespace Porfolio.Interfaces
         List<FileDetails> GetAllFiles(string folderName);
         Task<FileDetails> UpdateFile(IFormFile newFile, string folderName, string existingFileName);
         bool DeleteFile(string folderName, string fileName);
-        bool DeleteAllFiles(string folderName); 
+        bool DeleteAllFiles(string folderName);
     }
 }

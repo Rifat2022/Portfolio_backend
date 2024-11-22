@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Porfolio.Data;
-using Porfolio.Interfaces;
 using Porfolio.Repositories;
 using Porfolio.Services;
-using Porfolio.UnitOfWork;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
+using Porfolio.Repositories.Interface;
+using Porfolio.Services.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,11 +14,13 @@ builder.Services.AddDbContext<PortfolioContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PortfolioDb")));
 
 // Dependency Injection
+builder.Services.AddScoped<IFileDetailsRepository, IFileDetailsRepository>();
 builder.Services.AddScoped<ICustomerReviewRepository, CustomerReviewRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddScoped<IFileService, FileService>();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IFileDetailsService, FileDetailsService>();
+
 
 // Form options for large file uploads
 builder.Services.Configure<FormOptions>(o =>

@@ -1,7 +1,7 @@
 ﻿using Porfolio.Data;
 using Porfolio.Model;
 using Microsoft.AspNetCore.StaticFiles;
-using Porfolio.Interfaces;
+using Porfolio.Repositories.Interface;
 
 namespace Porfolio.Repositories
 {

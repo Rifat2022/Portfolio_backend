@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Porfolio.Data;
 
@@ -10,9 +11,11 @@ using Porfolio.Data;
 namespace Porfolio.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    partial class PortfolioContextModelSnapshot : ModelSnapshot
+    [Migration("20241122015644_AddCustomerReviewFileDetailsRelationAgain")]
+    partial class AddCustomerReviewFileDetailsRelationAgain
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -67,11 +70,11 @@ namespace Porfolio.Migrations
 
             modelBuilder.Entity("Porfolio.Model.FileDetails", b =>
                 {
-                    b.Property<int>("FileDetailsId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FileDetailsId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ContentType")
                         .IsRequired()
@@ -89,7 +92,7 @@ namespace Porfolio.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("FileDetailsId");
+                    b.HasKey("Id");
 
                     b.ToTable("FileDetails");
                 });
