@@ -9,5 +9,6 @@ namespace Porfolio.Services.Interface
         Task<FileDetails> AddFileDetailsAsync(FileDetails fileDetails);
         Task<FileDetails> UpdateFileDetailsAsync(FileDetails fileDetails);
         Task<bool> DeleteFileDetailsAsync(int id);
+        Task<FileDetails> GetFileDetailsFromFile(IFormFile file); 
     }
 }

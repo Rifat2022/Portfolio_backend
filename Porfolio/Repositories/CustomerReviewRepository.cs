@@ -15,10 +15,27 @@ namespace Porfolio.Repositories
         }
         public async Task<CustomerReview> CreateCustomerReviewAsync(CustomerReview review)
         {
-            _context.CustomerReviews.Add(review);
-            await _context.SaveChangesAsync();
-            return review;
+            if (review == null)
+            {
+                throw new ArgumentNullException(nameof(review), "Review cannot be null.");
+            }
+
+            try
+            {
+                _context.CustomerReviews.Add(review);
+                await _context.SaveChangesAsync();
+                return review;
+            }
+            catch (Exception e)
+            {
+                // Log the exception for debugging purposes
+                Console.WriteLine($"Error occurred while saving CustomerReview: {e.Message}");
+
+                // Rethrow the exception to be handled by a higher layer
+                throw new InvalidOperationException("Failed to create the customer review.", e);
+            }
         }
+
 
         public async Task<IEnumerable<CustomerReview>> GetAllCustomerReviewsAsync()
         {

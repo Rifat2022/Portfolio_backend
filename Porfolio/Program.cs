@@ -14,9 +14,9 @@ builder.Services.AddDbContext<PortfolioContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PortfolioDb")));
 
 // Dependency Injection
-builder.Services.AddScoped<IFileDetailsRepository, IFileDetailsRepository>();
-builder.Services.AddScoped<ICustomerReviewRepository, CustomerReviewRepository>();
+builder.Services.AddScoped<IFileDetailsRepository, FileDetailsRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
+builder.Services.AddScoped<ICustomerReviewRepository, CustomerReviewRepository>();
 builder.Services.AddScoped<ICustomerReviewService, CustomerReviewService>();
 builder.Services.AddScoped<IFileService, FileService>();
 builder.Services.AddScoped<IFileDetailsService, FileDetailsService>();

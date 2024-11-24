@@ -1,16 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Porfolio.Data;
 using Porfolio.Model;
+using Porfolio.Repositories.Interface;
 
 namespace Porfolio.Repositories
 {
-    public class FileDetailsRepository
+    public class FileDetailsRepository : IFileDetailsRepository
     {
-        private readonly PortfolioContext _context;
+        private readonly PortfolioContext? _context;
 
-        public FileDetailsRepository(PortfolioContext context)
+        public FileDetailsRepository(PortfolioContext? context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public async Task<IEnumerable<FileDetails>> GetAllFileDetailsAsync()

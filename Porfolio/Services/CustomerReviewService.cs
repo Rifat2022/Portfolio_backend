@@ -9,42 +9,46 @@ namespace Porfolio.Services
         private readonly ILogger<CustomerReview> _logger;
         private readonly IFileService _fileService;
         private readonly ICustomerReviewRepository _customerReviewRepository;
+        private readonly IFileDetailsService _fileDetailsService;
 
         public CustomerReviewService (
             ICustomerReviewRepository customerReviewRepository,
-            IFileService fileService, 
+            IFileService fileService,
+            IFileDetailsService fileDetailsService,
             ILogger<CustomerReview> logger)
         {
             _customerReviewRepository = customerReviewRepository;
             _fileService = fileService; 
+            _fileDetailsService = fileDetailsService;
             _logger = logger;
         }
 
-        private readonly ICustomerReviewRepository _repository;
 
-        public async Task<CustomerReview> CreateCustomerReviewAsync(CustomerReview review)
+        public async Task<CustomerReview> CreateCustomerReviewAsync(CustomerReview review, IFormFile file)
         {
-            return await _repository.CreateCustomerReviewAsync(review);
+            var fileDetails = await _fileDetailsService.GetFileDetailsFromFile(file);
+            review.FileDetails = fileDetails;
+            return await _customerReviewRepository.CreateCustomerReviewAsync(review);
         }
 
         public async Task<IEnumerable<CustomerReview>> GetAllCustomerReviewsAsync()
         {
-            return await _repository.GetAllCustomerReviewsAsync();
+            return await _customerReviewRepository.GetAllCustomerReviewsAsync();
         }
 
         public async Task<CustomerReview?> GetCustomerReviewByIdAsync(int id)
         {
-            return await _repository.GetCustomerReviewByIdAsync(id);
+            return await _customerReviewRepository.GetCustomerReviewByIdAsync(id);
         }
 
         public async Task<CustomerReview?> UpdateCustomerReviewAsync(int id, CustomerReview review)
         {
-            return await _repository.UpdateCustomerReviewAsync(id, review);
+            return await _customerReviewRepository.UpdateCustomerReviewAsync(id, review);
         }
 
         public async Task<bool> DeleteCustomerReviewAsync(int id)
         {
-            return await _repository.DeleteCustomerReviewAsync(id);
+            return await _customerReviewRepository.DeleteCustomerReviewAsync(id);
         }
 
     }
