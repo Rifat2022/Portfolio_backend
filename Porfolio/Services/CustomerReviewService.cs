@@ -41,9 +41,15 @@ namespace Porfolio.Services
             return await _customerReviewRepository.GetCustomerReviewByIdAsync(id);
         }
 
-        public async Task<CustomerReview?> UpdateCustomerReviewAsync(int id, CustomerReview review)
+        public async Task<CustomerReview?> UpdateCustomerReviewAsync(int id, CustomerReview updatedReview, IFormFile? file = null)
         {
-            return await _customerReviewRepository.UpdateCustomerReviewAsync(id, review);
+            //write customer review logic or whatever
+            if(file != null )
+            {
+                var fileDetails = await _fileDetailsService.GetFileDetailsFromFile(file);
+                updatedReview.FileDetails = fileDetails;
+            }
+            return await _customerReviewRepository.UpdateCustomerReviewAsync(id, updatedReview);
         }
 
         public async Task<bool> DeleteCustomerReviewAsync(int id)

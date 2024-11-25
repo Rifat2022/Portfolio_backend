@@ -1,15 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Porfolio.Data;
 using Porfolio.Model;
-using Porfolio.Services;
 using Porfolio.Services.Interface;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace Porfolio.Controllers
 {
@@ -17,6 +9,8 @@ namespace Porfolio.Controllers
     [ApiController]
     public class CustomerReviewController : ControllerBase
     {
+        // don't add any functions other than controllers
+
         private readonly ICustomerReviewService _customerReviewService;
         public CustomerReviewController(ICustomerReviewService customerReviewService)
         {
@@ -102,15 +96,45 @@ namespace Porfolio.Controllers
 
         // Update a CustomerReview
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCustomerReview(int id, [FromBody] CustomerReview review)
+        public async Task<IActionResult> UpdateCustomerReview(int id)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            try
+            {
+                // Validate the model state
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            var updatedReview = await _customerReviewService.UpdateCustomerReviewAsync(id, review);
-            if (updatedReview == null)
-                return NotFound();
-            return Ok(updatedReview);
+                // Parse the form collection
+                var formCollection = await Request.ReadFormAsync();
+
+                // Extract file from form collection
+                IFormFile file = formCollection.Files.FirstOrDefault(); // This safely retrieves the first file or null if none
+
+                // Extract and validate JSON data
+                if (!formCollection.TryGetValue("UpdatedCustomerReview", out var updatedCustomerReviewJson) || string.IsNullOrEmpty(updatedCustomerReviewJson))
+                {
+                    return BadRequest("CustomerReview data is missing or invalid.");
+                }
+
+                // Deserialize the JSON string into a CustomerReview object
+                var updatedCustomerReview = JsonConvert.DeserializeObject<CustomerReview>(updatedCustomerReviewJson);
+
+                // Call the service to update the review
+                var updatedReview = await _customerReviewService.UpdateCustomerReviewAsync(id, updatedCustomerReview, file);
+                if (updatedReview == null)
+                {
+                    return NotFound();
+                }
+
+                // Return the updated review
+                return CreatedAtAction(nameof(GetCustomerReviewById), new { id = updatedReview.Id }, updatedReview);
+            }
+            catch (Exception exception)
+            {
+                return StatusCode(500, "An error occurred while processing your request.\n" + new { exception.Message });
+            }
         }
 
         // Delete a CustomerReview

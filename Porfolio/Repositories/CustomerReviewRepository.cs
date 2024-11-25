@@ -53,7 +53,9 @@ namespace Porfolio.Repositories
 
         public async Task<CustomerReview?> UpdateCustomerReviewAsync(int id, CustomerReview review)
         {
-            var existingReview = await _context.CustomerReviews.FindAsync(id);
+            var existingReview = await _context.CustomerReviews
+                .Include(cr=>cr.FileDetails)
+                .FirstOrDefaultAsync (cr => cr.Id == id);
             if (existingReview == null)
                 return null;
 
@@ -73,7 +75,6 @@ namespace Porfolio.Repositories
                 existingReview.FileDetails.Path = review.FileDetails.Path;
                 existingReview.FileDetails.Data = review.FileDetails.Data;
             }
-
             await _context.SaveChangesAsync();
             return existingReview;
         }
