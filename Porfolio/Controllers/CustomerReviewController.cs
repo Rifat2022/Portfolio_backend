@@ -28,7 +28,6 @@ namespace Porfolio.Controllers
                 //var files = formCollection.Files;
                 //foreach (var file in files)
                 //{
-
                 //}
                 //var folderName = Path.Combine("StaticFiles", "Images");
                 //var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -141,11 +140,12 @@ namespace Porfolio.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomerReview(int id)
         {
-            var success = await _customerReviewService.DeleteCustomerReviewAsync(id);
+            bool success = await _customerReviewService.DeleteCustomerReviewAsync(id);
             if (!success)
+            {
                 return NotFound();
-            return NoContent();
+            }
+            return Ok(new { message = "File Deleted!" }); 
         }
-
     }
 }

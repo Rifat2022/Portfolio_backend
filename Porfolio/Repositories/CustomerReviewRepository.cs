@@ -81,11 +81,17 @@ namespace Porfolio.Repositories
 
         public async Task<bool> DeleteCustomerReviewAsync(int id)
         {
-            var review = await _context.CustomerReviews.FindAsync(id);
+            var review = await _context.CustomerReviews
+                .Include(cr => cr.FileDetails)
+                .FirstOrDefaultAsync(cr => cr.Id == id);
             if (review == null)
                 return false;
 
             _context.CustomerReviews.Remove(review);
+            if (review.FileDetails != null)
+            {
+                _context.FileDetails.Remove(review.FileDetails);
+            }
             await _context.SaveChangesAsync();
             return true;
         }
