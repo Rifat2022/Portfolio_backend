@@ -13,13 +13,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<PortfolioContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PortfolioDb")));
 
-// Dependency Injection
+// Dependency Injection of Repositoris
 builder.Services.AddScoped<IFileDetailsRepository, FileDetailsRepository>();
+builder.Services.AddScoped<IOfferedServiceRepository, OfferedServiceRepository>();
 builder.Services.AddScoped<IFileRepository, FileRepository>();
 builder.Services.AddScoped<ICustomerReviewRepository, CustomerReviewRepository>();
+// Dependency Injection of Services
+
 builder.Services.AddScoped<ICustomerReviewService, CustomerReviewService>();
-builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IOfferedServicesService, OfferedServicesService>();
 builder.Services.AddScoped<IFileDetailsService, FileDetailsService>();
+builder.Services.AddScoped<IFileService, FileService>();
 
 
 // Form options for large file uploads
