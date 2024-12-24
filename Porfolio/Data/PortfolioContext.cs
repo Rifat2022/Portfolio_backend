@@ -76,12 +76,12 @@ namespace Porfolio.Data
                .WithOne(bv => bv.Blog)
                .HasForeignKey(bc => bc.BlogId)
                .OnDelete(DeleteBehavior.Cascade);
-                        
+
             modelBuilder.Entity<ContentPhoto>()
-                .HasOne(cp => cp.BlogFileDetails) // Navigation from ContentPhoto to BlogFileDetails
-                .WithOne(bfd => bfd.ContentPhoto) // Navigation from BlogFileDetails to ContentPhoto
-                .HasForeignKey<BlogFileDetails>(bfd => bfd.ContentPhotoId) // FK in BlogFileDetails
-                .OnDelete(DeleteBehavior.Cascade);
+                .HasOne(cp => cp.BlogFileDetails)
+                .WithOne(bfd => bfd.ContentPhoto)
+                .HasForeignKey<BlogFileDetails>(bfd => bfd.ContentPhotoId) // BlogFileDetails is the dependent
+                .OnDelete(DeleteBehavior.Cascade); // Cascade delete for the relationship
 
 
         }

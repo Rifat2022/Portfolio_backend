@@ -54,14 +54,23 @@ namespace Porfolio.Repositories
         // Get all Blogs
         public async Task<List<Blog>> GetAllBlogAsync()
         {
-            return await _context.Blogs
-                .Include(b => b.Comments)
-                .Include(b => b.BlogCategories)
-                .Include(b => b.ContentPhotos)
-                .Include(b => b.BlogVideo)
-                .Include(b => b.BlogContents)
-                //.Include(b => b.SerialIdentifier)
-                .ToListAsync();
+            try
+            {
+                var blogs = await _context.Blogs
+                                .Include(b => b.Comments)
+                                .Include(b => b.BlogCategories)
+                                .Include(b => b.ContentPhotos)
+                                    .ThenInclude(cp=>cp.BlogFileDetails)
+                                .Include(b => b.BlogVideo)
+                                .Include(b => b.BlogContents)
+                                .ToListAsync();
+                return blogs;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.InnerException.Message);
+            }
+            
         }
 
         // Update an existing Blog

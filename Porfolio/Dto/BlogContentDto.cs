@@ -4,11 +4,9 @@ namespace Porfolio.Dto
 {
     public class BlogContentDto
     {
-        [Required]
-        public int Serial { get; set; }
-        [Required]
-        public string ContentToolUniqueId { get; set; }
-        [Required]
-        public string Content { get; set; }
+        public int? Id { get; set; }
+        public int? SerialNo { get; set; }
+        public string? Content { get; set; }
+        public string? UniqueId { get; set; }
     }
 }

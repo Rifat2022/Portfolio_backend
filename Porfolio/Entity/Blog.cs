@@ -16,7 +16,7 @@ namespace Porfolio.Entity
         public string? MetaTitle { get; set; } = null;
 
         public BlogVideo? BlogVideo { get; set; } = null; 
-        public CoverPhoto? CoverPhoto { get; set; } = default!;
+        public CoverPhoto? CoverPhoto { get; set; } = null;
 
         public virtual ICollection<ContentPhoto>? ContentPhotos { get; set; }
         public virtual ICollection<BlogContent>? BlogContents { get; set; }

@@ -1,9 +1,13 @@
-﻿namespace Porfolio.Dto
+﻿using Porfolio.Entity;
+
+namespace Porfolio.Dto
 {
     public class ContentPhotoDto
     {
-        public int Serial { get; set; }
-        public string UniqueId { get; set; }
-        public IFormFile? File { get; set; }
+        public int? Id { get; set; }
+        public string? SerialNo { get; set; } = "";
+        public string? UniqueId { get; set; } = "";
+
+        public BlogFileDetailsDto? BlogFileDetails { get; set; } = null;
     }
 }

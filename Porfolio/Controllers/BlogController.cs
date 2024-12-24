@@ -72,9 +72,9 @@ namespace Porfolio.Controllers
                 {
                     BlogContents.Add(new BlogContent
                     {
-                        SerialNo = blogContent.Serial,
+                        SerialNo = blogContent.SerialNo,
                         Content = blogContent.Content,
-                        UniqueId = blogContent.ContentToolUniqueId,
+                        UniqueId = blogContent.UniqueId,
                     }); 
                 }
             }
@@ -156,9 +156,50 @@ namespace Porfolio.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBlogs()
         {
-            var blogs = await _blogService.GetAllBlogsAsync();
-            if (blogs == null) return NotFound(new { Message = "Empty Blog Entity"});
-            return Ok(blogs);
+            List<Blog> blogs = await _blogService.GetAllBlogsAsync();
+            Console.WriteLine(blogs);
+
+            var blogDto = blogs.Select(blog => new BlogDto
+            {
+                Id = blog.Id,
+                Title = blog.Title,
+                Slug = blog.Slug,
+                MetaDescription = blog.MetaDescription,
+                MetaTitle = blog.MetaTitle,
+                AuthorName = blog.AuthorName,
+                CoverPhoto = (blog.CoverPhoto != null) ? blog.CoverPhoto: null,
+                BlogVideo = (blog.BlogVideo != null) ? blog.BlogVideo: null,
+                BlogContent = blog.BlogContents?.Select(bc => new BlogContentDto
+                {
+                    Id = bc.Id, 
+                    SerialNo = bc.SerialNo,
+                    UniqueId = bc.UniqueId,
+                    Content = bc.Content,
+                }).ToList(),
+                ContentPhotos = blog.ContentPhotos?.Select(cp => new ContentPhotoDto
+                {
+                    Id = cp.Id,
+                    SerialNo = cp.SerialNo,
+                    UniqueId = cp.UniqueId,
+                    BlogFileDetails = (cp.BlogFileDetails == null) ? null 
+                        : new BlogFileDetailsDto
+                        {
+                            Id = cp.BlogFileDetails.Id,
+                            Name = cp.BlogFileDetails.Name,
+                            Type = cp.BlogFileDetails.Type,
+                            Path = cp.BlogFileDetails.Path
+                        }
+                }).ToList(),                
+            });
+            try
+            {
+                if (blogDto == null) return NotFound(new { Message = "Empty Blog Entity" });
+                return Ok(blogDto);
+            }
+            catch (Exception ex) {
+                throw new Exception(ex.InnerException.Message); 
+            }
+             
         }
 
         [HttpPut("{id}")]
@@ -212,9 +253,9 @@ namespace Porfolio.Controllers
                 {
                     BlogContents.Add(new BlogContent
                     {
-                        SerialNo = blogContent.Serial,
+                        SerialNo = blogContent.SerialNo,
                         Content = blogContent.Content,
-                        UniqueId = blogContent.ContentToolUniqueId,
+                        UniqueId = blogContent.UniqueId,
                     });
                 }
             }

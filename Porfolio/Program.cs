@@ -27,7 +27,10 @@ builder.Services.AddScoped<IFileService, FileService>();
 
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
 builder.Services.AddScoped<IBlogService, BlogService>();
-
+builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 // Form options for large file uploads
 builder.Services.Configure<FormOptions>(o =>
 {
