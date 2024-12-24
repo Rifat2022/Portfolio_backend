@@ -25,9 +25,17 @@ namespace Porfolio.Repositories
         // Create a new Blog
         public async Task<Blog> CreateBlogAsync(Blog blog)
         {
-            _context.Blogs.Add(blog);
-            await _context.SaveChangesAsync();
-            return blog;
+            try
+            {
+                _context.Blogs.Add(blog);
+                await _context.SaveChangesAsync();
+                return blog;
+            }
+            catch (Exception ex) 
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         // Get a Blog by its ID

@@ -6,10 +6,10 @@ namespace Porfolio.Entity
     {
         [Key]
         public int Id { get; set; }
-        public string Content { get; set; }
+        public string? Content { get; set; } = null;
 
         // Foreign Key for BlogPost
         public int BlogId { get; set; }
-        public Blog Blog { get; set; }
+        public Blog? Blog { get; set; }
     }
 }

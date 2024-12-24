@@ -7,7 +7,7 @@ namespace Porfolio.Dto
         [Required]
         public int Serial { get; set; }
         [Required]
-        public string UniqueId { get; set; }
+        public string ContentToolUniqueId { get; set; }
         [Required]
         public string Content { get; set; }
     }

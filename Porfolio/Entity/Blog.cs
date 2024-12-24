@@ -8,21 +8,21 @@ namespace Porfolio.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string AuthorName { get; set; } = null!; 
-        public string Title { get; set; } = null!;
-        public string? Heading { get; set; }
+        public string? AuthorName { get; set; } = null!;
+        public string? Title { get; set; } = null!;
+        public string? Heading { get; set; } = null;
         public string? Slug { get; set; }
-        public string? MetaDescription { get; set; }
-        public string? MetaTitle { get; set; }
+        public string? MetaDescription { get; set; } = null;
+        public string? MetaTitle { get; set; } = null;
 
-        public BlogVideo? BlogVideo { get; set; }
-        public CoverPhoto? CoverPhoto { get; set; }
+        public BlogVideo? BlogVideo { get; set; } = null; 
+        public CoverPhoto? CoverPhoto { get; set; } = default!;
 
         public virtual ICollection<ContentPhoto>? ContentPhotos { get; set; }
         public virtual ICollection<BlogContent>? BlogContents { get; set; }
         public virtual ICollection<Comment>? Comments { get; set; }
         public virtual ICollection<BlogCategory>? BlogCategories { get; set; } 
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; } = null;
 
     }
 

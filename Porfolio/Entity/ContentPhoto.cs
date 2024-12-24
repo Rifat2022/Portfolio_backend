@@ -9,7 +9,7 @@ namespace Porfolio.Entity
         public string SerialNo { get; set; } = "";
         public string UniqueId { get; set; } = "";
 
-        public BlogFileDetails? BlogFileDetails { get; set; }
+        public BlogFileDetails? BlogFileDetails { get; set; } = null; 
         public int BlogId { get; set; }
         public Blog? Blog { get; set; }
     }

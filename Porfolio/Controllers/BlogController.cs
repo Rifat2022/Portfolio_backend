@@ -74,7 +74,7 @@ namespace Porfolio.Controllers
                     {
                         SerialNo = blogContent.Serial,
                         Content = blogContent.Content,
-                        UniqueId = blogContent.UniqueId,
+                        UniqueId = blogContent.ContentToolUniqueId,
                     }); 
                 }
             }
@@ -84,15 +84,15 @@ namespace Porfolio.Controllers
             foreach (var file in contentPhotoFiles)
             {
                 var fileName = file.FileName;
-                if (fileName == null)
-                {
-                    return BadRequest(new { Message = "Invalid File!"});
-                }
+                //if (fileName == null)
+                //{
+                //    return BadRequest(new { Message = "Invalid File!"});
+                //}
                 var fileDetails = await _fileDetailsService.GetFileDetailsFromFile(file);
                 var contentPhoto = new ContentPhoto
                 {
-                    SerialNo = fileName.Split('-')[1].ToString(),
-                    UniqueId = fileName.Split('-')[2].ToString(),
+                    SerialNo = fileName.Split("%!%")[1].ToString(),
+                    UniqueId = fileName.Split("%!%")[2].ToString(),
 
                     BlogFileDetails = new BlogFileDetails
                     {
@@ -134,14 +134,14 @@ namespace Porfolio.Controllers
                     }: null,
                     ContentPhotos = ContentPhotos,
                 };
-
+                blog.CreatedAt = new DateTime().ToLocalTime();
                 var createdBlog = await _blogService.CreateBlogAsync(blog);
                 return CreatedAtAction(nameof(GetBlogById), new { id = createdBlog.Id }, createdBlog);
 
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { message = ex.Message, innerException = ex?.InnerException?.Message });
             }
         }
 
@@ -214,7 +214,7 @@ namespace Porfolio.Controllers
                     {
                         SerialNo = blogContent.Serial,
                         Content = blogContent.Content,
-                        UniqueId = blogContent.UniqueId,
+                        UniqueId = blogContent.ContentToolUniqueId,
                     });
                 }
             }
