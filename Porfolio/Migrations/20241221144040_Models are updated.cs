@@ -5,7 +5,7 @@
 namespace Porfolio.Migrations
 {
     /// <inheritdoc />
-    public partial class keyassigntoCustomerRviewid : Migration
+    public partial class Modelsareupdated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

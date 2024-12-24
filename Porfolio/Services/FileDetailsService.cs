@@ -1,8 +1,6 @@
-﻿using Porfolio.Controllers;
-using Porfolio.Model;
+﻿using Porfolio.Model;
 using Porfolio.Repositories.Interface;
 using Porfolio.Services.Interface;
-using System.IO;
 
 namespace Porfolio.Services
 {

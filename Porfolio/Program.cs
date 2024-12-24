@@ -25,6 +25,8 @@ builder.Services.AddScoped<IOfferedServicesService, OfferedServicesService>();
 builder.Services.AddScoped<IFileDetailsService, FileDetailsService>();
 builder.Services.AddScoped<IFileService, FileService>();
 
+builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+builder.Services.AddScoped<IBlogService, BlogService>();
 
 // Form options for large file uploads
 builder.Services.Configure<FormOptions>(o =>
