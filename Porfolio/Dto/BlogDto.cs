@@ -11,9 +11,10 @@ namespace Porfolio.Dto
         public string? MetaTitle { get; set; }
         public string? MetaDescription { get; set; }
         public string? AuthorName { get; set; }
-        public List<BlogContentDto>? BlogContent { get; set; }
+        public List<BlogContentDto>? BlogContents { get; set; }
         public List<ContentPhotoDto>? ContentPhotos { get; set; }
         public CoverPhoto? CoverPhoto{ get; set; }
         public BlogVideo? BlogVideo{ get; set; }
+        public DateTime? CreatedAt { get; set; }
     }
 }

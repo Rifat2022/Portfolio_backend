@@ -29,11 +29,11 @@ namespace Porfolio.Controllers
             // Read form data
             var formCollection = await Request.ReadFormAsync();
 
-            var title = formCollection["title"];
-            var authorName = formCollection["authorName"];
-            var heading = formCollection["heading"];
-            var slug = formCollection["slug"];
-            var metaTitle = formCollection["metaTitle"];
+            var title = formCollection["title"].ToString();
+            var authorName = formCollection["authorName"].ToString();
+            var heading = formCollection["heading"].ToString();
+            var slug = formCollection["slug"].ToString();
+            var metaTitle = formCollection["metaTitle"].ToString();
             var metaDescription = formCollection["metaDescription"].ToString();
             //var serialIdentifierJson = formCollection["serialIdentifier"];
             CoverPhoto coverPhoto = new CoverPhoto();
@@ -134,7 +134,7 @@ namespace Porfolio.Controllers
                     }: null,
                     ContentPhotos = ContentPhotos,
                 };
-                blog.CreatedAt = new DateTime().ToLocalTime();
+                blog.CreatedAt = DateTime.Now.ToLocalTime();
                 var createdBlog = await _blogService.CreateBlogAsync(blog);
                 return CreatedAtAction(nameof(GetBlogById), new { id = createdBlog.Id }, createdBlog);
 
@@ -169,7 +169,7 @@ namespace Porfolio.Controllers
                 AuthorName = blog.AuthorName,
                 CoverPhoto = (blog.CoverPhoto != null) ? blog.CoverPhoto: null,
                 BlogVideo = (blog.BlogVideo != null) ? blog.BlogVideo: null,
-                BlogContent = blog.BlogContents?.Select(bc => new BlogContentDto
+                BlogContents = blog.BlogContents?.Select(bc => new BlogContentDto
                 {
                     Id = bc.Id, 
                     SerialNo = bc.SerialNo,
@@ -189,7 +189,8 @@ namespace Porfolio.Controllers
                             Type = cp.BlogFileDetails.Type,
                             Path = cp.BlogFileDetails.Path
                         }
-                }).ToList(),                
+                }).ToList(),  
+                CreatedAt = blog.CreatedAt
             });
             try
             {
