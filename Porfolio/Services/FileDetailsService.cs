@@ -46,9 +46,9 @@ namespace Porfolio.Services
                 {
                     throw new ArgumentNullException(nameof(file), "File cannot be null.");
                 }
-                if (file.Length > 10 * 1024 * 1024) // Example: 10 MB limit
+                if (!file.ContentType.StartsWith("video") && file.Length > 10 * 1024 * 1024) // Example: 10 MB limit for photos
                 {
-                    throw new InvalidOperationException("File size exceeds the maximum allowed limit.");
+                    throw new InvalidOperationException("File  size exceeds the maximum allowed limit.");
                 }
                 using var memoryStream = new MemoryStream();
                 await file.CopyToAsync(memoryStream);

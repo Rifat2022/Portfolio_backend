@@ -33,12 +33,15 @@ builder.Services.AddControllersWithViews()
 );
 // Form options for large file uploads
 builder.Services.Configure<FormOptions>(o =>
-{
+{   
     o.ValueLengthLimit = 50 * 1024 * 1024; // 50 MB
     o.MultipartBodyLengthLimit = 50 * 1024 * 1024; // 50 MB
     o.MemoryBufferThreshold = 1 * 1024 * 1024; // 1 MB
 });
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 50 * 1024 * 1024; // 50 MB
+});
 // CORS policy
 builder.Services.AddCors(options =>
 {
