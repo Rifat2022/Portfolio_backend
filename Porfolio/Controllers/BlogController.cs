@@ -31,7 +31,6 @@ namespace Porfolio.Controllers
 
             var title = formCollection["title"].ToString();
             var authorName = formCollection["authorName"].ToString();
-            var heading = formCollection["heading"].ToString();
             var slug = formCollection["slug"].ToString();
             var metaTitle = formCollection["metaTitle"].ToString();
             var metaDescription = formCollection["metaDescription"].ToString();
@@ -112,7 +111,6 @@ namespace Porfolio.Controllers
                 var blog = new Blog
                 {
                     Title = title,
-                    Heading = heading,
                     Slug = slug,
                     MetaTitle = metaTitle,
                     MetaDescription = metaDescription,
@@ -187,7 +185,8 @@ namespace Porfolio.Controllers
                             Id = cp.BlogFileDetails.Id,
                             Name = cp.BlogFileDetails.Name,
                             Type = cp.BlogFileDetails.Type,
-                            Path = cp.BlogFileDetails.Path
+                            Path = cp.BlogFileDetails.Path, 
+                            Data = cp.BlogFileDetails.Data
                         }
                 }).ToList(),  
                 CreatedAt = blog.CreatedAt
@@ -213,7 +212,6 @@ namespace Porfolio.Controllers
 
             var title = formCollection["title"];
             var authorName = formCollection["authorName"];
-            var heading = formCollection["heading"];
             var slug = formCollection["slug"];
             var metaTitle = formCollection["metaTitle"];
             var metaDescription = formCollection["metaDescription"].ToString();
@@ -294,7 +292,6 @@ namespace Porfolio.Controllers
                 var blog = new Blog
                 {
                     Title = title,
-                    Heading = heading,
                     Slug = slug,
                     MetaTitle = metaTitle,
                     MetaDescription = metaDescription,
@@ -333,7 +330,7 @@ namespace Porfolio.Controllers
             var deleted = await _blogService.DeleteBlogByIdAsync(id);
             if (!deleted) return NotFound();
 
-            return Ok(new {Message = $"Blog id = {id} deleted", id});
+            return StatusCode(200, new { Message = $"Blog id = {id} deleted", id });
         }
     }
 

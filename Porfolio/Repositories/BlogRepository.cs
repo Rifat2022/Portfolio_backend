@@ -63,6 +63,7 @@ namespace Porfolio.Repositories
                                     .ThenInclude(cp=>cp.BlogFileDetails)
                                 .Include(b => b.BlogVideo)
                                 .Include(b => b.BlogContents)
+                                .Include(b=> b.CoverPhoto)
                                 .ToListAsync();
                 return blogs;
             }
@@ -85,7 +86,6 @@ namespace Porfolio.Repositories
             // Update properties
             existingBlog.AuthorName = blog.AuthorName;
             existingBlog.Title = blog.Title;
-            existingBlog.Heading = blog.Heading;
             existingBlog.Slug = blog.Slug;
             existingBlog.MetaDescription = blog.MetaDescription;
             existingBlog.CreatedAt = blog.CreatedAt;
